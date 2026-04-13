@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eFootball Pro Tracker | Khaled vs Amine</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stadium-overlay"></div>
+    
+    <header class="main-header">
+        <div class="logo">E-FOOTBALL <span class="rival">RIVALRY</span></div>
+        <div class="date-badge" id="current-date">APRIL 13, 2026</div>
+    </header>
+
+    <main class="dashboard">
+        <section class="stats-bar" id="stats-summary">
+            </section>
+
+        <section class="score-panel">
+            <div class="panel-title">REGISTER MATCH RESULT</div>
+            <div class="input-group">
+                <div class="player-input">
+                    <label>KHALED</label>
+                    <input type="number" id="inp-k" value="0" min="0">
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="player-input">
+                    <label>AMINE</label>
+                    <input type="number" id="inp-a" value="0" min="0">
+                </div>
+            </div>
+            <button class="btn-submit" onclick="saveMatch()">SUBMIT SCORE</button>
+        </section>
+
+        <section class="history-panel">
+            <div class="panel-title">RECENT FIXTURES</div>
+            <div id="match-list" class="match-grid">
+                </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

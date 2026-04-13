@@ -1,0 +1,96 @@
+:root {
+    --pitch-green: #00ff85;
+    --navy-dark: #020617;
+    --glass: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+    --accent-red: #ff005a;
+}
+
+body {
+    margin: 0;
+    background-color: var(--navy-dark);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+.stadium-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--navy-dark) 80%);
+    z-index: -1;
+}
+
+.main-header {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -1px;
+}
+
+.rival { color: var(--pitch-green); }
+
+.score-panel {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 600px;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--pitch-green);
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.player-input input {
+    background: #000;
+    border: 2px solid var(--border);
+    color: var(--pitch-green);
+    font-size: 2.5rem;
+    width: 80px;
+    text-align: center;
+    font-family: 'Barlow Condensed';
+    border-radius: 4px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem;
+    background: var(--pitch-green);
+    color: black;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    font-family: 'Barlow Condensed';
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+}
+
+.match-card {
+    background: var(--glass);
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    border-left: 3px solid var(--border);
+}
