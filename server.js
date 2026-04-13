@@ -8,28 +8,42 @@ app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 
-// INITIAL SETUP: This includes your OLD DATA
-const oldData = [
-  { k: 6, a: 5, date: '2026-04-03' },
-  { k: 4, a: 6, date: '2026-04-03' },
-  // ... Add all 27 matches from your file here
-  { k: 2, a: 4, date: '2026-04-13' }
-];
-
+// GET all matches from Postgres
 app.get('/matches', async (req, res) => {
-  const result = await pool.query('SELECT * FROM matches ORDER BY date DESC');
-  res.json(result.rows);
+  try {
+    const result = await pool.query('SELECT * FROM matches ORDER BY id ASC');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
+// POST a new match to Postgres
 app.post('/matches', async (req, res) => {
   const { k, a, date } = req.body;
-  const result = await pool.query(
-    'INSERT INTO matches (k, a, date) VALUES ($1, $2, $3) RETURNING *',
-    [k, a, date]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'INSERT INTO matches (k, a, date) VALUES ($1, $2, $3) RETURNING *',
+      [k, a, date]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.listen(process.env.PORT || 3000);
+// DELETE a match
+app.delete('/matches/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM matches WHERE id = $1', [req.params.id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
