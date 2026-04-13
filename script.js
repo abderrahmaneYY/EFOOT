@@ -1,30 +1,25 @@
-// Replace this with your Railway URL once deployed
-const RAILWAY_API = "https://your-project.up.railway.app/matches";
+const API_URL = "postgresql://postgres:itiydtwEjGvJHhymwNtLWsVJjNjDIiip@postgres.railway.internal:5432/railway";
 
 async function loadMatches() {
-    // For now, it pulls from the local data you already have
-    // When Railway is ready, change this to: const res = await fetch(RAILWAY_API);
-    renderStats();
-    renderMatches();
-}
-
-function renderStats() {
-    const statsContainer = document.getElementById('stats-summary');
-    // Logic to calculate wins/goals from your previous data
-    statsContainer.innerHTML = `
-        <div class="stat-box">KHALED WINS: 13</div>
-        <div class="stat-box">AMINE WINS: 11</div>
-    `;
+  const res = await fetch(API_URL);
+  const matches = await res.json();
+  renderStats(matches);
+  renderMatches(matches);
 }
 
 async function saveMatch() {
-    const kScore = document.getElementById('inp-k').value;
-    const aScore = document.getElementById('inp-a').value;
+  const kv = parseInt(document.getElementById('inp-k').value) || 0;
+  const av = parseInt(document.getElementById('inp-a').value) || 0;
+  const today = new Date().toISOString().split('T')[0];
 
-    console.log(`Saving: Khaled ${kScore} - Amine ${aScore}`);
-    
-    // API POST Logic goes here
-    alert("Match Data Sent to Database!");
+  await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ k: kv, a: av, date: today })
+  });
+
+  loadMatches();
+  // Reset inputs
+  document.getElementById('inp-k').value = 0;
+  document.getElementById('inp-a').value = 0;
 }
-
-window.onload = loadMatches;
