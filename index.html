@@ -3,45 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eFootball Pro Tracker | Khaled vs Amine</title>
+    <title>eFootball Cloud Tracker</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@sqlitecloud/drivers/dist/sqlitecloud-bundle.min.js"></script>
 </head>
 <body>
-    <div class="stadium-overlay"></div>
-    
-    <header class="main-header">
-        <div class="logo">E-FOOTBALL <span class="rival">RIVALRY</span></div>
-        <div class="date-badge" id="current-date">APRIL 13, 2026</div>
-    </header>
 
-    <main class="dashboard">
-        <section class="stats-bar" id="stats-summary">
-            </section>
+<div class="hdr">
+    <div class="logo">eF</div>
+    <div class="hdr-title">eFootball Cloud</div>
+    <div class="live-dot"><span></span>Connected</div>
+</div>
 
-        <section class="score-panel">
-            <div class="panel-title">REGISTER MATCH RESULT</div>
-            <div class="input-group">
-                <div class="player-input">
-                    <label>KHALED</label>
-                    <input type="number" id="inp-k" value="0" min="0">
-                </div>
-                <div class="vs-divider">VS</div>
-                <div class="player-input">
-                    <label>AMINE</label>
-                    <input type="number" id="inp-a" value="0" min="0">
-                </div>
+<div class="wrap">
+    <div class="h2h-card">
+        <div class="h2h-players">
+            <div>
+                <div class="avatar k">K</div>
+                <div class="wins-num k" id="k-wins">0</div>
             </div>
-            <button class="btn-submit" onclick="saveMatch()">SUBMIT SCORE</button>
-        </section>
+            <div class="vs-box">
+                <div style="font-weight:800">VS</div>
+                <div id="matches-count" style="font-size:11px;color:var(--text3)">0 matches</div>
+            </div>
+            <div>
+                <div class="avatar a">A</div>
+                <div class="wins-num a" id="a-wins">0</div>
+            </div>
+        </div>
+    </div>
 
-        <section class="history-panel">
-            <div class="panel-title">RECENT FIXTURES</div>
-            <div id="match-list" class="match-grid">
-                </div>
-        </section>
-    </main>
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="k-goals" style="color:var(--green)">0</div><div class="stat-lbl">K Goals</div></div>
+        <div class="stat-card"><div class="stat-num" id="total-draws">0</div><div class="stat-lbl">Draws</div></div>
+        <div class="stat-card"><div class="stat-num" id="a-goals" style="color:var(--red)">0</div><div class="stat-lbl">A Goals</div></div>
+    </div>
 
-    <script src="script.js"></script>
+    <div class="record-form">
+        <div class="score-input-row">
+            <input class="score-input" type="number" id="inp-k" value="0">
+            <div>:</div>
+            <input class="score-input" type="number" id="inp-a" value="0">
+        </div>
+        <button class="save-btn" onclick="saveMatch()">Save to Cloud</button>
+    </div>
+
+    <div id="match-list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
