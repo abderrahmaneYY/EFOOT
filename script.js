@@ -1,4 +1,4 @@
-const connectionString = 'sqlitecloud://cxfpqgd2dz.g2.sqlite.cloud:8860/auth.sqlitecloud?apikey=iyb5YyA3PInZp0B2u6fAnf779Z5mI6lPZ6kR8nL';
+const connectionString = 'sqlitecloud://cxfpqgd2dz.g2.sqlite.cloud:8860/auth.sqlitecloud?apikey=iyb5YB2dOtdJnbtb4BaxPkRjBkyPa36zoGIVaUgDrpw';
 const db = new sqlitecloud.Database(connectionString);
 
 async function loadMatches() {
