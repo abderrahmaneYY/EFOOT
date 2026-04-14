@@ -1,37 +1,45 @@
+// Connection initialized first to avoid ReferenceError
 const connectionString = 'sqlitecloud://cxfpqgd2dz.g2.sqlite.cloud:8860/auth.sqlitecloud?apikey=iyb5YB2dOtdJnbtb4BaxPkRjBkyPa36zoGIVaUgDrpw';
 const db = new sqlitecloud.Database(connectionString);
 
-async function loadMatches() {
+async function init() {
     try {
-        return await db.sql`SELECT * FROM matches ORDER BY id DESC`;
-    } catch (e) {
-        console.error("Load Error:", e);
-        return [];
+        const matches = await db.sql`SELECT * FROM matches ORDER BY id DESC`;
+        renderStats(matches);
+        renderMatches(matches);
+    } catch (err) {
+        console.error("Initialization failed:", err);
     }
 }
 
 async function saveMatch() {
-    const kv = parseInt(document.getElementById('inp-k').value) || 0;
-    const av = parseInt(document.getElementById('inp-a').value) || 0;
+    const kScore = parseInt(document.getElementById('inp-k').value) || 0;
+    const aScore = parseInt(document.getElementById('inp-a').value) || 0;
 
     try {
-        await db.sql`INSERT INTO matches (k, a) VALUES (${kv}, ${av})`;
-        showToast("Syncing with EFOOT Cloud...");
-        await init();
+        // Insert match into cloud table
+        await db.sql`INSERT INTO matches (k, a) VALUES (${kScore}, ${aScore})`;
+        
+        // Reset inputs
         document.getElementById('inp-k').value = 0;
         document.getElementById('inp-a').value = 0;
-    } catch (e) {
-        console.error("Save Error:", e);
+        
+        showToast("Synced to Cloud");
+        await init(); 
+    } catch (err) {
+        console.error("Save failed:", err);
+        alert("SQL Error: Check if table 'matches' exists.");
     }
 }
 
 async function deleteMatch(id) {
-    if(!confirm("Delete match record?")) return;
+    if(!confirm("Delete this match?")) return;
     try {
         await db.sql`DELETE FROM matches WHERE id = ${id}`;
         await init();
-        showToast("Match removed.");
-    } catch (e) { console.error(e); }
+    } catch (err) {
+        console.error("Delete failed:", err);
+    }
 }
 
 function renderStats(matches) {
@@ -40,6 +48,7 @@ function renderStats(matches) {
         if(m.k > m.a) kw++; else if(m.a > m.k) aw++; else dr++;
         kg += m.k; ag += m.a;
     });
+    
     document.getElementById('k-wins').textContent = kw;
     document.getElementById('a-wins').textContent = aw;
     document.getElementById('total-draws').textContent = dr;
@@ -52,10 +61,10 @@ function renderMatches(matches) {
     const list = document.getElementById('match-list');
     list.innerHTML = matches.map(m => `
         <div class="match-item">
-            <span style="font-size:12px; color:var(--text3)">#${m.id}</span>
+            <span style="color:var(--text3); font-size:12px;">#${m.id}</span>
             <div class="score-pill">${m.k} - ${m.a}</div>
-            <div style="display:flex; gap:10px; align-items:center">
-                <span style="font-size:10px; color:var(--text3)">${m.date || 'Today'}</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="color:var(--text3); font-size:10px;">${m.date || 'Today'}</span>
                 <button class="del-btn" onclick="deleteMatch(${m.id})">🗑</button>
             </div>
         </div>
@@ -65,14 +74,9 @@ function renderMatches(matches) {
 function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    t.className = "toast show";
+    setTimeout(() => { t.className = "toast"; }, 2500);
 }
 
-async function init() {
-    const data = await loadMatches();
-    renderStats(data);
-    renderMatches(data);
-}
-
+// Start app
 init();
